@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            /* padding: 0;
+            margin: 0; */
+        }
+
+        body {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            display: grid;
+            height: 100vh;
+            width: 100vw;
+            place-items: center;
+            margin: 0;
+            background-color: hsla(0, 0%, 0%, .9);
+        }
+
+        .slide {
+            display: none;
+            height: 100%;
+            width: 100%;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 600px;
+            height: 320px;
+            background-color: white;
+        }
+
+        .slide:nth-of-type(1) {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes appearanceEffect {
+            from {
+                opacity: .2;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .slide img {
+
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            animation: appearanceEffect .3s ease-in;
+        }
+
+        .slide .current-slide {
+            padding: 0;
+            margin: 0;
+            z-index: 1;
+            font-size: 1.3rem;
+            color: white;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+
+        .balls-container {
+            z-index: 1;
+            position: absolute;
+            display: flex;
+            width: 100%;
+            bottom: 10px;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .balls-container span {
+            width: 15px;
+            height: 15px;
+            border-radius: 7.5px;
+            background-color: white;
+            transition: background-color .2s ease;
+        }
+
+        .balls-container span:hover {
+            background-color: #aaa;
+        }
+
+        .balls-container span:nth-child(1) {
+            background-color: #bbb;
+        }
+
+        button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 50px;
+            width: 30px;
+            border: none;
+            background-color: hsla(0, 0%, 100%, .2);
+            transition: background-color .3s ease;
+        }
+
+        button:hover {
+            background-color: hsla(0, 0%, 100%, .6)
+        }
+
+        button:nth-of-type(1) {
+            left: 0px;
+        }
+
+        button:nth-of-type(2) {
+            right: 0px;
+        }
+
+        button:nth-of-type(1) span {
+            transform: rotate(135deg) translateX(-3px)
+        }
+
+        button:nth-of-type(2) span {
+            transform: rotate(-45deg) translateY(-2px)
+        }
+
+        button span {
+            display: inline-block;
+            height: 5px;
+            width: 5px;
+            border: 3px solid black;
+            border-top: transparent;
+            border-left: transparent;
+        }
+    </style>
+</head>
+
+<body>
+
+    <article class="slider-container">
+        <div class="slide">
+            <p class="current-slide"></p>
+            <img src="https://p4.wallpaperbetter.com/wallpaper/449/542/349/hd-nature-mountain-1920x1080-wallpaper-preview.jpg"
+                alt="duas crianças brincando no campo">
+        </div>
+
+        <div class="slide">
+            <p class="current-slide"></p>
+            <img src="https://images.hdqwalls.com/wallpapers/desert-moon-4k-lk.jpg"
+                alt="duas crianças brincando no campo">
+        </div>
+
+        <div class="slide">
+            <p class="current-slide"></p>
+            <img src="https://images5.alphacoders.com/651/651068.jpg" alt="duas crianças brincando no campo">
+        </div>
+
+        <div class="slide">
+            <p class="current-slide"></p>
+            <img src="https://images.squarespace-cdn.com/content/v1/54ae2d92e4b01e0916da186d/1432014160360-B63GTUHRNLH28PQRUBZW/2015_hawaii_005.jpg?format=2500w"
+                alt="duas crianças brincando no campo">
+        </div>
+
+        <button id="prev"><span></span></button>
+        <button id="next"><span></span></button>
+
+        <div class="balls-container"></div>
+
+    </article>
+
+    <script>
+
+
+        let slides = document.getElementsByClassName('slide');
+        let btnPrev = document.querySelector('#prev');
+        let btnNext = document.querySelector('#next');
+        let ballContainer = document.querySelector('.balls-container');
+        let numberSlide = 1;
+        let balls = null
+
+        for (let i = 0; i < slides.length; i++) {
+            let ball = document.createElement('span');
+            ball.setAttribute('onclick', `changeSlide(${i + 1})`);
+            ballContainer.appendChild(ball);
+            balls = document.querySelectorAll('.balls-container span');
+        }
+
+        btnPrev.addEventListener("click", prevSlide);
+        btnNext.addEventListener('click', nextSlide);
+
+
+        function removeAllslides() {
+            [...slides].forEach((el) => el.style.display = 'none');
+        }
+
+        function changeSlide(n) {
+            removeAllslides();
+            numberSlide = n;
+            applySlide();
+            console.log(balls);
+            [...balls].forEach(ball => ball.style.backgroundColor = 'white');
+            balls[numberSlide - 1].style.backgroundColor = '#bbb';
+        }
+
+        function nextSlide() {
+            removeAllslides();
+            numberSlide++;
+            changeSlide(numberSlide)
+        }
+        function prevSlide() {
+            removeAllslides();
+            numberSlide--
+            changeSlide(numberSlide)
+        }
+
+        function applySlide() {
+            if (numberSlide > slides.length) { numberSlide = 1 }
+            if (numberSlide < 1) { numberSlide = slides.length };
+            console.log(numberSlide - 1)
+            slides[numberSlide - 1].style.display = 'block';
+        }
+
+        for (let i = 0; i < slides.length; i++) {
+            let currentSlide = slides[i].querySelector('p');
+            currentSlide.textContent = i + 1 + '/' + slides.length;
+        }
+
+    </script>
+
+</body>
+
+</html>
